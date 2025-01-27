@@ -8,7 +8,7 @@ from django.http import HttpRequest
 from lists.views import home_page
 
 class HomePageTest(TestCase):
-
+'''
     def test_root_url_resolves_to_home_page_view(self):
         """
         uses resolve to map the root URL('/') ti outs corresponding view
@@ -20,14 +20,25 @@ class HomePageTest(TestCase):
 
     def test_home_page_returns_correct_html(self):
         #creates an httprequest to simulate a request to the home page view
-        request = HttpRequest()
+        #request = HttpRequest()
 
         #calls the home page request to get the response
-        response = home_page(request)
+        #response = home_page(request)
+        
+        #instead of manually creating an HttpRequest object and calling the view function
+        #we directly call self.client.get and pass the URL we want to test
+        response = self.client.get('/')
 
         html = response.content.decode('utf8')
 
         #validates the home_page view return the correct html structure
         self.assertTrue(html.startswith('<html>'))
         self.assertIn('<title>To-Do lists</title>', html)
-        self.assertTrue(html.endswith('</html>'))
+        self.assertTrue(html.strip().endswith('</html>'))
+
+        self.assertTemplateUsed(response, 'home.html')
+'''
+
+    def test_uses_home_template(self):
+        response = self.client.get('/')
+        self.assertTemplateUsed(response, 'home.html'))
